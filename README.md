@@ -1,2 +1,3 @@
-# nodejs-mvc
-E-commerce application training
+# NestJS PostgreSQL TypeORM
+
+LinkedIn clone application training
