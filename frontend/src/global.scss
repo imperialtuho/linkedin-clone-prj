@@ -25,18 +25,19 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-.my-custom-class {
-  --width: 320px;
-  --margin-top: 16px;
+.my-custom-class .popover-content {
+  width: 300px;
+  margin-top: 16px;
   --box-shadow: none;
   --background: none;
 }
+
 .my-custom-class2 {
   --width: 552px;
   --height: 400px;
-  --margin-top: -100px;
+  margin-top: -100px;
   ion-grid {
-    --margin: 0;
+    margin: 0;
     padding-bottom: 0;
   }
   ion-textarea {
@@ -47,11 +48,13 @@
 .item-divider {
   border-bottom: 1px solid var(--ion-color-light-tint);
 }
+
 ion-button {
   text-transform: initial;
 }
+
 ion-button {
   ion-text {
-    --margin-left: 8px;
+    margin-left: 8px;
   }
 }

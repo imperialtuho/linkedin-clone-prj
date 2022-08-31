@@ -11,6 +11,7 @@
     font-size: 44px;
   }
 }
+
 .subtitle-container {
   display: flex;
   justify-content: center;
@@ -19,6 +20,7 @@
   font-size: 30px;
   text-align: center;
 }
+
 form {
   max-width: 400px;
   margin: auto;
@@ -27,7 +29,7 @@ form {
     border: 1px solid #e1e1e1;
     padding: 24px;
     .terms-and-conditions {
-      font-size: 12x;
+      font-size: 12px;
       text-align: center;
       margin-top: 16px;
       ion-text {
@@ -44,7 +46,7 @@ form {
 .toggle-text {
   display: flex;
   justify-content: center;
-  justify-items: center;
+  align-items: center;
   ion-text {
     font-weight: 500;
     cursor: pointer;

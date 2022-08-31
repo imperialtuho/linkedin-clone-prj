@@ -19,6 +19,7 @@ ion-card {
 ion-card-header {
   display: flex;
 }
+
 ion-avatar {
   width: 48px;
   height: 48px;
@@ -26,7 +27,7 @@ ion-avatar {
 
 ion-card-header {
   ion-button {
-    --border-with: 1px;
+    --border-width: 1px;
     height: 48px;
     width: 100%;
     margin-left: 16px;

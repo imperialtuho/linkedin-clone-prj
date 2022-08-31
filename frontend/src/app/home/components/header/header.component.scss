@@ -3,14 +3,17 @@
   max-width: 1128px;
   margin: auto;
 }
+
 .linkedin-logo {
   font-size: 40px;
 }
 
-ion-col div {
+ion-col div,
+ion-badge {
   font-size: 12px;
   font-weight: 400;
 }
+
 ion-searchbar {
   --box-shadow: none;
   transform: scale(0.8);

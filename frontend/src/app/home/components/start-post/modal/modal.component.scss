@@ -4,9 +4,10 @@
   justify-content: space-between;
   align-items: center;
   ion-button {
-    padding: 0px;
+    padding: 0;
   }
 }
+
 ion-grid ion-button {
   --border-width: 1px;
   height: 30px;

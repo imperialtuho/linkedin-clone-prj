@@ -11,6 +11,7 @@ export class TabsComponent implements OnInit {
   constructor(public modalController: ModalController) {}
 
   ngOnInit() {}
+
   async presentModal() {
     const modal = await this.modalController.create({
       component: ModalComponent,
@@ -19,8 +20,8 @@ export class TabsComponent implements OnInit {
     await modal.present();
     const { data, role } = await modal.onDidDismiss();
     if (data) {
-      console.log('data existed!');
+      console.log('data exists!');
     }
-    console.log('role: ', role, 'data: ', data);
+    console.log('role: ', role, 'data:', data);
   }
 }
