@@ -8,24 +8,26 @@ import {
   Put,
   Query,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { JwtGuard } from 'src/auth/guards/jwt.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Role } from 'src/constants/user-role.enum';
 import { DeleteResult, UpdateResult } from 'typeorm';
-import { IsCreatorGuard } from '../guards/is-creator.guard';
+
+import { JwtGuard } from '../../auth/guards/jwt.guard';
+
 import { FeedPost } from '../models/post.interface';
 import { FeedService } from '../services/feed.service';
+
+import { IsCreatorGuard } from '../guards/is-creator.guard';
 
 @Controller('feed')
 export class FeedController {
   constructor(private feedService: FeedService) {}
 
-  @Roles(Role.ADMIN, Role.PREMIUM)
-  @UseGuards(JwtGuard, RolesGuard)
+  // @Roles(Role.ADMIN, Role.PREMIUM)
+  // @UseGuards(JwtGuard, RolesGuard)
+  @UseGuards(JwtGuard)
   @Post()
   create(@Body() feedPost: FeedPost, @Request() req): Observable<FeedPost> {
     return this.feedService.createPost(req.user, feedPost);
@@ -33,13 +35,14 @@ export class FeedController {
 
   // @Get()
   // findAll(): Observable<FeedPost[]> {
-  //   return this.feedService.findAllPost();
+  //   return this.feedService.findAllPosts();
   // }
 
+  @UseGuards(JwtGuard)
   @Get()
   findSelected(
-    @Query('take') take: number,
-    @Query('skip') skip: number,
+    @Query('take') take: number = 1,
+    @Query('skip') skip: number = 1,
   ): Observable<FeedPost[]> {
     take = take > 20 ? 20 : take;
     return this.feedService.findPosts(take, skip);
@@ -58,5 +61,11 @@ export class FeedController {
   @Delete(':id')
   delete(@Param('id') id: number): Observable<DeleteResult> {
     return this.feedService.deletePost(id);
+  }
+
+  @Get('image/:fileName')
+  findImageByName(@Param('fileName') fileName: string, @Res() res) {
+    if (!fileName || ['null', '[null]'].includes(fileName)) return;
+    return res.sendFile(fileName, { root: './images' });
   }
 }

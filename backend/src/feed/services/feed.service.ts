@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
-import { User } from 'src/auth/models/user.interface';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+
+import { User } from '../../auth/models/user.class';
 import { FeedPostEntity } from '../models/post.entity';
 import { FeedPost } from '../models/post.interface';
 
@@ -18,18 +19,19 @@ export class FeedService {
     return from(this.feedPostRepository.save(feedPost));
   }
 
-  findAllPost(): Observable<FeedPost[]> {
+  findAllPosts(): Observable<FeedPost[]> {
     return from(this.feedPostRepository.find());
   }
 
-  // findPosts(take: number, skip: number): Observable<FeedPost[]> {
+  // findPosts(take: number = 10, skip: number = 0): Observable<FeedPost[]> {
   //   return from(
   //     this.feedPostRepository.findAndCount({ take, skip }).then(([posts]) => {
-  //       return posts;
+  //       return <FeedPost[]>posts;
   //     }),
   //   );
   // }
-  findPosts(take: number, skip: number): Observable<FeedPost[]> {
+
+  findPosts(take: number = 10, skip: number = 0): Observable<FeedPost[]> {
     return from(
       this.feedPostRepository
         .createQueryBuilder('post')

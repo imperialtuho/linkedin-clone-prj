@@ -1,16 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { from, map, Observable, switchMap } from 'rxjs';
-import * as bcrypt from 'bcrypt';
-import { User } from '../models/user.interface';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEnity } from '../models/user.entity';
-import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+
+import * as bcrypt from 'bcrypt';
+import { from, Observable, of } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { Repository } from 'typeorm';
+import { UserEntity } from '../models/user.entity';
+import { User } from '../models/user.class';
+
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEnity)
-    private readonly userRepository: Repository<UserEnity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     private jwtService: JwtService,
   ) {}
 
@@ -18,22 +21,41 @@ export class AuthService {
     return from(bcrypt.hash(password, 12));
   }
 
+  doesUserExist(email: string): Observable<boolean> {
+    return from(this.userRepository.findOne({ email })).pipe(
+      switchMap((user: User) => {
+        return of(!!user);
+      }),
+    );
+  }
+
   registerAccount(user: User): Observable<User> {
     const { firstName, lastName, email, password } = user;
 
-    return this.hashPassword(password).pipe(
-      switchMap((hashedPassword: string) => {
-        return from(
-          this.userRepository.save({
-            firstName,
-            lastName,
-            email,
-            password: hashedPassword,
-          }),
-        ).pipe(
-          map((user: User) => {
-            delete user.password;
-            return user;
+    return this.doesUserExist(email).pipe(
+      tap((doesUserExist: boolean) => {
+        if (doesUserExist)
+          throw new HttpException(
+            'A user has already been created with this email address',
+            HttpStatus.BAD_REQUEST,
+          );
+      }),
+      switchMap(() => {
+        return this.hashPassword(password).pipe(
+          switchMap((hashedPassword: string) => {
+            return from(
+              this.userRepository.save({
+                firstName,
+                lastName,
+                email,
+                password: hashedPassword,
+              }),
+            ).pipe(
+              map((user: User) => {
+                delete user.password;
+                return user;
+              }),
+            );
           }),
         );
       }),
@@ -70,22 +92,23 @@ export class AuthService {
 
   login(user: User): Observable<string> {
     const { email, password } = user;
-    return from(this.validateUser(email, password)).pipe(
+    return this.validateUser(email, password).pipe(
       switchMap((user: User) => {
         if (user) {
-          //create JWT - credentials
+          // create JWT - credentials
           return from(this.jwtService.signAsync({ user }));
         }
       }),
     );
   }
-  findUserById(id: number): Observable<User> {
-    return from(
-      this.userRepository.findOne({ id }, { relations: ['feedPosts'] }),
-    ).pipe(
-      map((user: User) => {
-        delete user.password;
+
+  getJwtUser(jwt: string): Observable<User | null> {
+    return from(this.jwtService.verifyAsync(jwt)).pipe(
+      map(({ user }: { user: User }) => {
         return user;
+      }),
+      catchError(() => {
+        return of(null);
       }),
     );
   }
