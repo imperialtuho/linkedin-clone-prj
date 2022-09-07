@@ -19,10 +19,10 @@ let fixture: ComponentFixture<AuthPage>;
 let routerSpy: Partial<Router>;
 
 const mockNewUser: NewUser = {
-  firstName: 'Jon',
-  lastName: 'Peppinck',
-  email: 'jon@hotmail.com',
-  password: 'password',
+  firstName: 'Imperial Tu',
+  lastName: 'Ho',
+  email: 'imperialtuho0410@hotmail.com',
+  password: '123456',
 };
 
 const mockUser: User = {
@@ -41,40 +41,35 @@ const mockAuthService: Partial<AuthService> = {
 };
 
 describe('AuthPage', () => {
-  beforeEach(
-    waitForAsync(() => {
-      routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
+  beforeEach(waitForAsync(() => {
+    routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
 
-      TestBed.configureTestingModule({
-        imports: [FormsModule, IonicModule],
-        declarations: [AuthPage],
-        providers: [
-          { provide: Router, useValue: routerSpy },
-          { provide: AuthService, useValue: mockAuthService },
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      }).compileComponents();
+    TestBed.configureTestingModule({
+      imports: [FormsModule, IonicModule],
+      declarations: [AuthPage],
+      providers: [
+        { provide: Router, useValue: routerSpy },
+        { provide: AuthService, useValue: mockAuthService },
+      ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
 
-      fixture = TestBed.createComponent(AuthPage);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+    fixture = TestBed.createComponent(AuthPage);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
 
-      component.form = {
-        value: mockNewUser,
-      } as NgForm;
-      fixture.detectChanges();
-    })
-  );
+    component.form = {
+      value: mockNewUser,
+    } as NgForm;
+    fixture.detectChanges();
+  }));
 
-  it(
-    'should create with form values',
-    waitForAsync(() => {
-      fixture.whenStable().then(() => {
-        expect(component).toBeTruthy();
-        expect(component.form.value).toEqual(mockNewUser);
-      });
-    })
-  );
+  it('should create with form values', waitForAsync(() => {
+    fixture.whenStable().then(() => {
+      expect(component).toBeTruthy();
+      expect(component.form.value).toEqual(mockNewUser);
+    });
+  }));
 
   it('should have initial submission type of login', () => {
     expect(component.submissionType).toEqual('login');

@@ -36,6 +36,7 @@ describe('AuthService', () => {
         lastName: 'Ho',
         email: 'imperialtuho0410@gmail.com',
         role: 'user',
+        devRole: 'Fullstack Developer',
         imagePath: null,
         posts: null,
       };

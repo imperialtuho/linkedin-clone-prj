@@ -24,12 +24,16 @@ export class ProfileSummaryComponent implements OnInit, OnDestroy {
   validMimeTypes: validMimeType[] = ['image/png', 'image/jpg', 'image/jpeg'];
 
   userFullImagePath: string;
+
   private userImagePathSubscription: Subscription;
 
   private userSubscription: Subscription;
 
   fullName$ = new BehaviorSubject<string>(null);
   fullName = '';
+
+  devRole$ = new BehaviorSubject<string>(null);
+  devRole = '';
 
   constructor(
     private authService: AuthService,
@@ -48,6 +52,7 @@ export class ProfileSummaryComponent implements OnInit, OnDestroy {
 
     this.userSubscription = this.authService.userStream.subscribe(
       (user: User) => {
+        console.log(user);
         if (user?.role) {
           this.bannerColorService.bannerColors =
             this.bannerColorService.getBannerColors(user.role);
@@ -56,6 +61,11 @@ export class ProfileSummaryComponent implements OnInit, OnDestroy {
         if (user && user?.firstName && user?.lastName) {
           this.fullName = user.firstName + ' ' + user.lastName;
           this.fullName$.next(this.fullName);
+        }
+
+        if (user?.devRole) {
+          this.devRole = user.devRole;
+          this.devRole$.next(this.devRole);
         }
       }
     );

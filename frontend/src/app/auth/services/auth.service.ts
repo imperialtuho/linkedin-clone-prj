@@ -38,18 +38,21 @@ export class AuthService {
 
   get userRole(): Observable<Role> {
     return this.user$.asObservable().pipe(
-      switchMap((user: User) => {
-        return of(user?.role); // for after signed out, but still subscribed
-      })
+      switchMap(
+        (user: User) => of(user?.role) // for after signed out, but still subscribed
+      )
     );
+  }
+  get userDevRole(): Observable<string> {
+    return this.user$
+      .asObservable()
+      .pipe(switchMap((user: User) => of(user?.devRole)));
   }
 
   get userId(): Observable<number> {
-    return this.user$.asObservable().pipe(
-      switchMap((user: User) => {
-        return of(user.id);
-      })
-    );
+    return this.user$
+      .asObservable()
+      .pipe(switchMap((user: User) => of(user.id)));
   }
 
   get userFullName(): Observable<string> {

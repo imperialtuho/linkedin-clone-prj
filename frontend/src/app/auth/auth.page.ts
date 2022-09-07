@@ -31,7 +31,12 @@ export class AuthPage implements OnInit {
       const { firstName, lastName } = this.form.value;
       if (!firstName || !lastName) return;
 
-      const newUser: NewUser = { firstName, lastName, email, password };
+      const newUser: NewUser = {
+        firstName,
+        lastName,
+        email,
+        password,
+      };
 
       return this.authService.register(newUser).subscribe(() => {
         this.toggleText();

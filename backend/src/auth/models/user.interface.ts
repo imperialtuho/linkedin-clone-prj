@@ -9,5 +9,6 @@ export interface User {
   password?: string;
   imagePath?: string;
   role?: Role;
+  devRole?: string;
   posts?: FeedPost[];
 }

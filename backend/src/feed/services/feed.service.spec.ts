@@ -14,7 +14,7 @@ describe('FeedService', () => {
 
   const mockRequest = httpMocks.createRequest();
   mockRequest.user = new User();
-  mockRequest.user.firstName = 'Jon';
+  mockRequest.user.firstName = 'Imperial Tu';
 
   const mockFeedPost: FeedPost = {
     body: 'body',
